@@ -15,8 +15,8 @@ typedef struct {
 
 FILE* open_file(char *mode) {
     FILE *stream;
-    if (!(stream = fopen(".tasks", mode))) {
-        fprintf(stderr, "%serror:%s Could not open .tasks file\n", bold_red, reset_color);
+    if (!(stream = fopen("tasks.txt", mode))) {
+        fprintf(stderr, "%serror:%s Could not open tasks.txt file\n", bold_red, reset_color);
         exit(EXIT_FAILURE);
     }
     return stream;
