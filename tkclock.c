@@ -55,7 +55,7 @@ void restart_task(short time) {
     char restart;
     printf("This task has already been completed, do you want to start over? [y/n]: ");
     scanf("%c", &restart);
-    if ((restart == 'y') || (restart == 'Y'))
+    if ((restart = 'y') || (restart == 'Y'))
         start_task(time);
     exit(EXIT_SUCCESS);
 }
@@ -79,6 +79,12 @@ void print_tasks(int len, task task_list[]) {
 int main(int argc, char *argv[]) {
     FILE *stream = open_file("r");
     task tk_list[count_tasks(stream)];
+    int len = (sizeof(tk_list) / sizeof(task));
+    for (int i = 0; i < len; i++) {
+        tk_list[i].check = 0;
+        tk_list[i].time = 0;
+        strcpy(tk_list[i].description, "NULL");
+    }
     task tk;
     int i = 0;
     while (fscanf(stream, "%hi,%hi,%79[^\n]\n", &tk.check, &tk.time, tk.description) == 3) {
@@ -89,7 +95,6 @@ int main(int argc, char *argv[]) {
         i++;
     }
     fclose(stream);
-    int len = (sizeof(tk_list) / sizeof(task));
     switch (argc) {
         case 1:
             print_tasks(len, tk_list);
