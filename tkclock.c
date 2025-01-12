@@ -55,7 +55,7 @@ void restart_task(short time) {
     char restart;
     printf("This task has already been completed, do you want to start over? [y/n]: ");
     scanf("%c", &restart);
-    if ((restart = 'y') || (restart == 'Y'))
+    if ((restart == 'y') || (restart == 'Y'))
         start_task(time);
     exit(EXIT_SUCCESS);
 }
