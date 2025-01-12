@@ -22,11 +22,13 @@ FILE* open_file(char *mode) {
     return stream;
 }
 
-int count_tasks(FILE *stream) {
+int count_tasks() {
+    FILE *stream = open_file("r");
     int count = 0;
     char line[100];
     while (fgets(line, 100, stream))
         count++;
+    fclose(stream);
     return count;
 }
 
@@ -71,42 +73,42 @@ void print_tasks(int len, task task_list[]) {
     puts("tasks:");
     for (int i = 0; i < len; i++) {
         if (task_list[i].check)
-            printf("\t%s[x]%s (%-3im) %s\n", bold_green, reset_color, task_list[i].time, task_list[i].description);
+            printf("\t%s[x]%s (%3im) %s\n", bold_green, reset_color, task_list[i].time, task_list[i].description);
         else
-            printf("\t%s[ ]%s (%-3im) %s\n", bold_red, reset_color, task_list[i].time, task_list[i].description);
+            printf("\t%s[ ]%s (%3im) %s\n", bold_red, reset_color, task_list[i].time, task_list[i].description);
     }
 }
+
 int main(int argc, char *argv[]) {
     FILE *stream = open_file("r");
-    task tk_list[count_tasks(stream)];
-    int len = (sizeof(tk_list) / sizeof(task));
+    task task_list[count_tasks()];
+    int len = (sizeof(task_list) / sizeof(task));
     for (int i = 0; i < len; i++) {
-        tk_list[i].check = 0;
-        tk_list[i].time = 0;
-        strcpy(tk_list[i].description, "NULL");
+        task_list[i].check = 0;
+        task_list[i].time = 0;
+        strcpy(task_list[i].description, "NULL");
     }
-    task tk;
     int i = 0;
-    while (fscanf(stream, "%hi,%hi,%79[^\n]\n", &tk.check, &tk.time, tk.description) == 3) {
-        tk_list[i].check = tk.check;
-        tk_list[i].time = tk.time;
-        strcpy(tk_list[i].description, tk.description);
+    char line[100];
+    while (fgets(line, sizeof(line), stream)) {
+        line[strcspn(line, "\n")] = '\0';
+        sscanf(line, "%hi,%hi,%79[^\r\n]\n", &task_list[i].check, &task_list[i].time, task_list[i].description);
         fflush(stdin);
         i++;
     }
     fclose(stream);
     switch (argc) {
         case 1:
-            print_tasks(len, tk_list);
+            print_tasks(len, task_list);
             break;
         case 2:
-            int index = search_task(len, tk_list, argv[1]);
+            int index = search_task(len, task_list, argv[1]);
             if (index != -1) {
-                if (tk_list[index].check)
-                    restart_task(tk_list[index].time);
-                start_task(tk_list[index].time);
-                tk_list[index].check = 1;
-                update_file(len, tk_list);
+                if (task_list[index].check)
+                    restart_task(task_list[index].time);
+                start_task(task_list[index].time);
+                task_list[index].check = 1;
+                update_file(len, task_list);
                 break;
             } else {
                 puts("task not found!");
