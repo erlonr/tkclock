@@ -25,15 +25,27 @@ To get a local copy up and running, follow these steps:
     0,time_in_minutes,task N
     ```
 3. Run the program in the same directory as the tasks.txt file, passing the task name as an argument. if the task name has more than one word, use quotation marks.
-    - Linux:
+    - **Linux:**
         ```bash
         ./path_to/bin/tkclock "task name"
         ```
+    - **Windows:**
+        ```
+        .\path_to/bin/tkclock.exe "task name"
+        ```
 4. To print all tasks and check which ones have been completed, run the program in the same directory as the tasks.txt file, without passing any arguments.
-    - Linux
+    - **Linux:**
         ```bash
         ./path_to/bin/tkclock
         ```
+    - **Windows:**
+        ```
+        .\path_to/bin/tkclock.exe
+        ```
+
+When the time set for the task is up, an alert sound will be emitted on the terminal, and the task will be marked as completed.
+
+**To hear it, you must enable the system beep**
 
 ## License
 
